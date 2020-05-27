@@ -1,13 +1,22 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/hyptosis_tile-art-batch-1.png" type="Texture" id=1]
+[ext_resource path="res://assets/knight/knight_f_idle_anim_f2.png" type="Texture" id=2]
+[ext_resource path="res://assets/knight/knight_f_idle_anim_f0.png" type="Texture" id=3]
+[ext_resource path="res://assets/knight/knight_f_idle_anim_f1.png" type="Texture" id=4]
+[ext_resource path="res://assets/knight/knight_f_idle_anim_f3.png" type="Texture" id=5]
+[ext_resource path="res://assets/knight/knight_f_run_anim_f3.png" type="Texture" id=6]
+[ext_resource path="res://assets/knight/knight_f_run_anim_f2.png" type="Texture" id=7]
+[ext_resource path="res://assets/knight/knight_f_run_anim_f0.png" type="Texture" id=8]
+[ext_resource path="res://assets/knight/knight_f_run_anim_f1.png" type="Texture" id=9]
+[ext_resource path="res://Root.gd" type="Script" id=10]
 
 [sub_resource type="TileSet" id=1]
-0/name = "hyptosis_tile-art-batch-1.png 0"
+0/name = "wall"
 0/texture = ExtResource( 1 )
 0/tex_offset = Vector2( 0, 0 )
 0/modulate = Color( 1, 1, 1, 1 )
-0/region = Rect2( 96, 672, 32, 32 )
+0/region = Rect2( 864, 544, 32, 32 )
 0/tile_mode = 0
 0/occluder_offset = Vector2( 0, 0 )
 0/navigation_offset = Vector2( 0, 0 )
@@ -17,10 +26,136 @@
 0/shape_one_way_margin = 0.0
 0/shapes = [  ]
 0/z_index = 0
+1/name = "ladder"
+1/texture = ExtResource( 1 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 192, 128, 32, 32 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shape_offset = Vector2( 0, 0 )
+1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape_one_way = false
+1/shape_one_way_margin = 0.0
+1/shapes = [  ]
+1/z_index = 0
+2/name = "floor"
+2/texture = ExtResource( 1 )
+2/tex_offset = Vector2( 0, 0 )
+2/modulate = Color( 1, 1, 1, 1 )
+2/region = Rect2( 320, 288, 32, 32 )
+2/tile_mode = 0
+2/occluder_offset = Vector2( 0, 0 )
+2/navigation_offset = Vector2( 0, 0 )
+2/shape_offset = Vector2( 0, 0 )
+2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+2/shape_one_way = false
+2/shape_one_way_margin = 0.0
+2/shapes = [  ]
+2/z_index = 0
+3/name = "door"
+3/texture = ExtResource( 1 )
+3/tex_offset = Vector2( 0, 0 )
+3/modulate = Color( 1, 1, 1, 1 )
+3/region = Rect2( 672, 672, 32, 32 )
+3/tile_mode = 0
+3/occluder_offset = Vector2( 0, 0 )
+3/navigation_offset = Vector2( 0, 0 )
+3/shape_offset = Vector2( 0, 0 )
+3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+3/shape_one_way = false
+3/shape_one_way_margin = 0.0
+3/shapes = [  ]
+3/z_index = 0
+4/name = "stone"
+4/texture = ExtResource( 1 )
+4/tex_offset = Vector2( 0, 0 )
+4/modulate = Color( 1, 1, 1, 1 )
+4/region = Rect2( 480, 192, 32, 32 )
+4/tile_mode = 0
+4/occluder_offset = Vector2( 0, 0 )
+4/navigation_offset = Vector2( 0, 0 )
+4/shape_offset = Vector2( 0, 0 )
+4/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+4/shape_one_way = false
+4/shape_one_way_margin = 0.0
+4/shapes = [  ]
+4/z_index = 0
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 2 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 7 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "run",
+"speed": 5.0
+} ]
 
 [node name="Root" type="Node2D"]
+script = ExtResource( 10 )
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 1 )
-cell_size = Vector2( 16, 16 )
+cell_size = Vector2( 32, 32 )
+cell_quadrant_size = 32
 format = 1
+
+[node name="Knight" type="AnimatedSprite" parent="."]
+position = Vector2( 192, 128 )
+frames = SubResource( 2 )
+animation = "run"
+frame = 2
+playing = true
+
+[node name="Camera2D" type="Camera2D" parent="Knight"]
+position = Vector2( 16, 16 )
+current = true
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Background" type="ColorRect" parent="CanvasLayer"]
+margin_right = 640.0
+margin_bottom = 32.0
+color = Color( 0.101961, 0.101961, 0.101961, 0.713726 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Level" type="Label" parent="CanvasLayer"]
+margin_left = 64.0
+margin_right = 160.0
+margin_bottom = 32.0
+text = "Level:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HP" type="Label" parent="CanvasLayer"]
+margin_left = 184.0
+margin_right = 280.0
+margin_bottom = 32.0
+text = "HP:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="CanvasLayer"]
+margin_left = 288.0
+margin_right = 384.0
+margin_bottom = 32.0
+text = "Score:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

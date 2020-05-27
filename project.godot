@@ -16,7 +16,14 @@ _global_script_class_icons={
 [application]
 
 config/name="Godot-roguelike-example"
+run/main_scene="res://Root.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=640
+window/size/height=360
+window/stretch/mode="viewport"
 
 [rendering]
 
