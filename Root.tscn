@@ -105,15 +105,15 @@ cell_size = Vector2( 32, 32 )
 cell_quadrant_size = 32
 format = 1
 
-[node name="Knight" type="AnimatedSprite" parent="."]
+[node name="Player" type="AnimatedSprite" parent="."]
 position = Vector2( 192, 128 )
 frames = SubResource( 2 )
-animation = "run"
-frame = 2
+animation = "idle"
+frame = 3
 playing = true
 
-[node name="Camera2D" type="Camera2D" parent="Knight"]
-position = Vector2( 16, 16 )
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2( 128, 32 )
 current = true
 drag_margin_left = 0.0
 drag_margin_top = 0.0
