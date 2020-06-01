@@ -109,7 +109,7 @@ format = 1
 position = Vector2( 192, 128 )
 frames = SubResource( 2 )
 animation = "idle"
-frame = 3
+frame = 2
 playing = true
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
