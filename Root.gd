@@ -128,11 +128,11 @@ func connect_rooms():
 					stone_graph.connect_points(point_id, left_point)
 
 				# Connect above if also stone
-				if x > 0 && map[x][y - 1] == Tile.Stone:
+				if y > 0 && map[x][y - 1] == Tile.Stone:
 					var above_point = stone_graph.get_closest_point(Vector3(x, y - 1, 0))
 					stone_graph.connect_points(point_id, above_point)
 
-					point_id += 1
+				point_id += 1
 
 	# Build an AStar graph of room connections
 	var room_graph = AStar.new()
