@@ -14,7 +14,7 @@ const LEVEL_ROOM_COUNTS = [5, 7, 9, 12, 15]
 const MIN_ROOM_DIMENSION = 5
 const MAX_ROOM_DIMENSION = 8
 
-enum Tile { Wall, Door, Floor, Ladder, Stone }
+enum Tile { Wall, Ladder, Floor, Door, Stone }
 
 # CURRENT LEVEL --------------------------------
 
@@ -40,6 +40,34 @@ func _ready():
 	randomize()
 	build_level()
 
+func _input(event):
+	if !event.is_pressed():
+		return
+		
+	if event.is_action("Up"):
+		move_player(0, -1)
+	elif event.is_action("Down"):
+		move_player(0, 1)
+	elif event.is_action("Left"):
+		move_player(-1, 0)
+	elif event.is_action("Right"):
+		move_player(1, 0)
+		
+func move_player(dx, dy):
+	var x = player_tile.x + dx
+	var y = player_tile.y + dy
+	var tile_type = Tile.Stone
+	
+	if x >= 0 && x < level_size.x && y >= 0 && y < level_size.y:
+		tile_type = map[x][y]
+		
+	match tile_type:
+		Tile.Floor:
+			player_tile = Vector2(x, y)
+		Tile.Door:
+			set_tile(x, y, Tile.Floor)
+			
+	update_visuals()
 
 func build_level():
 	clear_map()
@@ -69,6 +97,19 @@ func setup_map():
 			break
 
 	connect_rooms()
+	place_player()
+
+func place_player():
+	var start_room = rooms.front()
+	var player_x = start_room.position.x + 1 + randi() % int(start_room.size.x - 2)
+	var player_y = start_room.position.y + 1 + randi() % int(start_room.size.y - 2)
+	
+	player_tile = Vector2(player_x, player_y)
+	update_visuals()
+	
+
+func update_visuals():
+	player.position = player_tile * TILE_SIZE
 
 
 func connect_rooms():
