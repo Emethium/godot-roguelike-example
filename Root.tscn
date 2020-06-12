@@ -160,3 +160,30 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Win" type="ColorRect" parent="CanvasLayer"]
+visible = false
+margin_right = 640.0
+margin_bottom = 352.0
+color = Color( 0, 0, 0, 0.701961 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Message" type="Label" parent="CanvasLayer/Win"]
+margin_left = 256.0
+margin_top = 96.0
+margin_right = 384.0
+margin_bottom = 128.0
+text = "YOU WIN, BASTARD"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Restart" type="Button" parent="CanvasLayer/Win"]
+margin_left = 288.0
+margin_top = 124.0
+margin_right = 352.0
+margin_bottom = 152.0
+text = "RESTART"
+[connection signal="pressed" from="CanvasLayer/Win/Restart" to="." method="_on_Restart_pressed"]
