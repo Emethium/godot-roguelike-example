@@ -162,7 +162,7 @@ tile_data = PoolIntArray( -262123, 0, 0, -65541, 0, 0, -65536, 0, 0, -65527, 0, 
 position = Vector2( 192, 128 )
 frames = SubResource( 2 )
 animation = "idle"
-frame = 1
+frame = 3
 playing = true
 offset = Vector2( 15, 10 )
 
