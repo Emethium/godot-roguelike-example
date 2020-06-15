@@ -19,8 +19,8 @@ All sprites and tilesets used here are **completely open source**.
 ### Known bugs
 
 - Doors may spawn out of the walls
-- Visibility layer only works for the visible screen on level creation, outside boundaries are always clear
-- Score system not showing values on the UI
+- Rooms may be created without doors
+- Visibility layer does not work correcly and is more clear than it should
 
 
 ### Screenshots

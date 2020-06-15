@@ -13,6 +13,7 @@ const LEVEL_ROOM_COUNTS = [5, 7, 9, 12, 15]
 const LEVEL_ENEMY_COUNTS = [5, 8, 12, 18, 26]
 const MIN_ROOM_DIMENSION = 5
 const MAX_ROOM_DIMENSION = 8
+const PLAYER_START_HP = 5
 
 enum Tile { Wall, Ladder, Floor, Door, Stone }
 
@@ -46,6 +47,28 @@ class ImpEnemy extends Reference:
 		if current_hp == 0:
 			dead = true
 			root_node.score += 10 * max_hp
+			
+	func act(root_node):
+		var self_point = root_node.enemy_pathfinding.get_closest_point(Vector3(tile.x, tile.y, 0))
+		var player_point = root_node.enemy_pathfinding.get_closest_point(Vector3(root_node.player_tile.x, root_node.player_tile.y, 0))
+		var path = root_node.enemy_pathfinding.get_point_path(self_point, player_point)
+		
+		if path:
+			assert(path.size() > 1)
+			var move_tile = Vector2(path[1].x, path[1].y)
+			
+			if move_tile == root_node.player_tile:
+				root_node.damage_player(1)
+			else:
+				var blocked = false
+				for enemy in root_node.enemies:
+					if enemy.tile == move_tile:
+						blocked = true
+						break
+				
+				if !blocked:
+					tile = move_tile
+
 
 # CURRENT LEVEL --------------------------------
 
@@ -64,8 +87,9 @@ onready var player = $Player
 # GAME STATE --------------------------------
 
 var player_tile
+var enemy_pathfinding
 var score = 0
-
+var player_hp = PLAYER_START_HP
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -111,12 +135,15 @@ func move_player(dx, dy):
 			set_tile(x, y, Tile.Floor)
 		Tile.Ladder:
 			level_number += 1
-			score += 20
+			score += 100
 			if level_number < LEVEL_SIZES.size():
 				build_level()
 			else:
 				score += 1000
 				$CanvasLayer/Win.visible = true
+	
+	for enemy in enemies:
+		enemy.act(self)
 			
 	call_deferred("update_visuals")
 
@@ -129,11 +156,34 @@ func clear_map():
 	rooms.clear()
 	map.clear()
 	tile_map.clear()
+	clear_enemies()
 	
+func clear_enemies():
 	for enemy in enemies:
 		enemy.remove()
 	enemies.clear()
 
+	enemy_pathfinding = AStar.new()
+	
+	
+func clear_path(tile):
+	var new_point = enemy_pathfinding.get_available_point_id()
+	var points_to_connect = []
+	
+	enemy_pathfinding.add_point(new_point, Vector3(tile.x, tile.y, 0))
+	
+	if tile.x > 0 && map[tile.x - 1][tile.y] == Tile.Floor:
+		points_to_connect.append(enemy_pathfinding.get_closest_point(Vector3(tile.x - 1, tile.y, 0)))
+	if tile.y > 0 && map[tile.x][tile.y - 1] == Tile.Floor:
+		points_to_connect.append(enemy_pathfinding.get_closest_point(Vector3(tile.x, tile.y - 1, 0)))
+	if tile.x < level_size.x - 1 && map[tile.x + 1][tile.y] == Tile.Floor:
+		points_to_connect.append(enemy_pathfinding.get_closest_point(Vector3(tile.x + 1, tile.y, 0)))
+	if tile.y < level_size.y - 1 && map[tile.x][tile.y + 1] == Tile.Floor:
+		points_to_connect.append(enemy_pathfinding.get_closest_point(Vector3(tile.x, tile.y + 1, 0)))
+		
+	for point in points_to_connect:
+		enemy_pathfinding.connect_points(point, new_point)
+	
 
 func setup_map():
 	level_size = LEVEL_SIZES[level_number]
@@ -210,7 +260,11 @@ func update_visuals():
 				
 				if !occlusion || (occlusion.position - test_point).length() < 1:
 					 visibility_map.set_cell(x, y, -1)
-					
+	
+	for enemy in enemies:
+		enemy.sprite_node.position = enemy.tile * TILE_SIZE
+	
+	$CanvasLayer/HP.text = "HP: " + str(player_hp)
 	$CanvasLayer/Score.text = "Score: " + str(score)
 	
 func tile_to_pixel_center(x, y):
@@ -389,6 +443,9 @@ func add_room(free_regions):
 func set_tile(x, y, type):
 	map[x][y] = type
 	tile_map.set_cell(x, y, type)
+	
+	if type == Tile.Floor:
+		clear_path(Vector2(x,y))
 
 
 func cut_regions(free_regions, region_to_remove):
@@ -431,9 +488,15 @@ func cut_regions(free_regions, region_to_remove):
 			for region in addition_queue:
 				free_regions.append(region)
 
+func damage_player(damage):
+	player_hp = max(0, player_hp - damage)
+	if player_hp == 0:
+		$CanvasLayer/Lose.visible = true
 
 func _on_Restart_pressed():
 	level_number = 0
 	score = 0
 	build_level()
 	$CanvasLayer/Win.visible = false
+	$CanvasLayer/Lose.visible = false
+	player_hp = PLAYER_START_HP
