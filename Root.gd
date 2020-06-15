@@ -119,7 +119,7 @@ func place_ladder():
 	set_tile(ladder_x, ladder_y, Tile.Ladder)
 
 func set_level_name():
-	$CanvasLayer/Level.text = "Level" + str(level_number)
+	$CanvasLayer/Level.text = "Level: " + str(level_number)
 
 func place_player():
 	var start_room = rooms.front()
@@ -275,7 +275,7 @@ func pick_random_door_location(room):
 	# Left and right walls
 	for y in range(room.position.y + 1, room.end.y - 2):
 		options.append(Vector3(room.position.x, y, 0))
-		options.append(Vector3(room.end.x, y, 0))
+		options.append(Vector3(room.end.x - 1, y, 0))
 
 	return options[randi() % options.size()]
 
