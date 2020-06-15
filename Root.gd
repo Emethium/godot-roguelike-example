@@ -30,7 +30,6 @@ class ImpEnemy extends Reference:
 		current_hp = max_hp
 		tile = Vector2(coord_x, coord_y)
 		sprite_node = ImpScene.instance()
-		# sprite_node.frame = enemy_level
 		sprite_node.position = tile * TILE_SIZE
 		root_node.add_child(sprite_node)
 		
@@ -211,6 +210,8 @@ func update_visuals():
 				
 				if !occlusion || (occlusion.position - test_point).length() < 1:
 					 visibility_map.set_cell(x, y, -1)
+					
+	$CanvasLayer/Score.text = "Score: " + str(score)
 	
 func tile_to_pixel_center(x, y):
 	return Vector2((x + 0.5) * TILE_SIZE, (y + 0.5) * TILE_SIZE)

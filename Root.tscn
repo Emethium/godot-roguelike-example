@@ -175,6 +175,7 @@ tile_data = PoolIntArray( -262123, 0, 0, -65541, 0, 0, -65536, 0, 0, -65527, 0, 
 position = Vector2( 192, 128 )
 frames = SubResource( 6 )
 animation = "idle"
+frame = 3
 playing = true
 offset = Vector2( 15, 10 )
 
@@ -255,11 +256,11 @@ text = "RESTART"
 [node name="DemonEnemy" type="AnimatedSprite" parent="."]
 position = Vector2( -96, 64 )
 frames = SubResource( 7 )
-frame = 3
+frame = 2
 playing = true
 offset = Vector2( 15, 5 )
 
 [node name="ImpEnemy" parent="." instance=ExtResource( 12 )]
 position = Vector2( -64, 64 )
-frame = 1
+frame = 0
 [connection signal="pressed" from="CanvasLayer/Win/Restart" to="." method="_on_Restart_pressed"]
