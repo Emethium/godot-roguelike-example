@@ -9,18 +9,51 @@ const LEVEL_SIZES = [
 	Vector2(45, 45),
 	Vector2(50, 50),
 ]
-
 const LEVEL_ROOM_COUNTS = [5, 7, 9, 12, 15]
+const LEVEL_ENEMY_COUNTS = [5, 8, 12, 18, 26]
 const MIN_ROOM_DIMENSION = 5
 const MAX_ROOM_DIMENSION = 8
 
 enum Tile { Wall, Ladder, Floor, Door, Stone }
+
+const ImpScene = preload("res://ImpEnemy.tscn")
+
+class ImpEnemy extends Reference:
+	var sprite_node: Node2D
+	var tile
+	var max_hp
+	var current_hp
+	var dead = false
+	
+	func _init(root_node, enemy_level, coord_x, coord_y):
+		max_hp = 1 + enemy_level * 2
+		current_hp = max_hp
+		tile = Vector2(coord_x, coord_y)
+		sprite_node = ImpScene.instance()
+		# sprite_node.frame = enemy_level
+		sprite_node.position = tile * TILE_SIZE
+		root_node.add_child(sprite_node)
+		
+	func remove():
+		sprite_node.queue_free()
+		
+	func take_damage(root_node, damage):
+		if dead:
+			return
+		
+		current_hp = max(0, current_hp - damage)
+		sprite_node.get_node("HP").rect_size.x = TILE_SIZE * current_hp / max_hp
+		
+		if current_hp == 0:
+			dead = true
+			root_node.score += 10 * max_hp
 
 # CURRENT LEVEL --------------------------------
 
 var level_number = 0
 var map = []
 var rooms = []
+var enemies = []
 var level_size
 
 # NODE REFERENCES --------------------------------
@@ -64,7 +97,17 @@ func move_player(dx, dy):
 		
 	match tile_type:
 		Tile.Floor:
-			player_tile = Vector2(x, y)
+			var blocked = false
+			for enemy in enemies:
+				if enemy.tile.x == x && enemy.tile.y == y:
+					enemy.take_damage(self, 1)
+					if enemy.dead:
+						enemy.remove()
+						enemies.erase(enemy)
+					blocked = true
+					break
+			if !blocked:
+				player_tile = Vector2(x, y)
 		Tile.Door:
 			set_tile(x, y, Tile.Floor)
 		Tile.Ladder:
@@ -87,6 +130,10 @@ func clear_map():
 	rooms.clear()
 	map.clear()
 	tile_map.clear()
+	
+	for enemy in enemies:
+		enemy.remove()
+	enemies.clear()
 
 
 func setup_map():
@@ -108,6 +155,7 @@ func setup_map():
 
 	connect_rooms()
 	place_player()
+	place_enemies()
 	place_ladder()
 	set_level_name()
 	
@@ -128,6 +176,23 @@ func place_player():
 	
 	player_tile = Vector2(player_x, player_y)
 	call_deferred("update_visuals")
+	
+func place_enemies():
+	var num_enemies =  LEVEL_ENEMY_COUNTS[level_number]
+	for i in range(num_enemies):
+		var room = rooms[1 + randi() % (rooms.size() - 1)]
+		var x = room.position.x + 1 + randi() % int(room.size.x - 2)
+		var y = room.position.y + 1 + randi() % int(room.size.y - 2)
+		
+		var blocked = false
+		for enemy in enemies:
+			if enemy.tile.x == x && enemy.tile.y == y:
+				blocked = true
+				break
+				
+		if !blocked:
+			var imp = ImpEnemy.new(self, randi() % 2, x, y)
+			enemies.append(imp)
 	
 
 func update_visuals():
