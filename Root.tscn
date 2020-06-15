@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://assets/hyptosis_tile-art-batch-1.png" type="Texture" id=1]
 [ext_resource path="res://assets/knight/knight_f_idle_anim_f2.png" type="Texture" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://ImpEnemy.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/demon/big_demon_idle_anim_f0.png" type="Texture" id=13]
 [ext_resource path="res://assets/demon/big_demon_idle_anim_f1.png" type="Texture" id=14]
+[ext_resource path="res://assets/music/Abstraction - Three Red Hearts - Sanctuary.wav" type="AudioStream" id=15]
 [ext_resource path="res://assets/demon/big_demon_idle_anim_f2.png" type="Texture" id=18]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
@@ -147,6 +148,50 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="DynamicFontData" id=16]
+font_path = "res://assets/fonts/OptimusPrinceps.ttf"
+
+[sub_resource type="DynamicFont" id=17]
+font_data = SubResource( 16 )
+
+[sub_resource type="DynamicFontData" id=18]
+font_path = "res://assets/fonts/OptimusPrinceps.ttf"
+
+[sub_resource type="DynamicFont" id=19]
+font_data = SubResource( 18 )
+
+[sub_resource type="DynamicFontData" id=20]
+font_path = "res://assets/fonts/OptimusPrinceps.ttf"
+
+[sub_resource type="DynamicFont" id=21]
+font_data = SubResource( 20 )
+
+[sub_resource type="DynamicFontData" id=12]
+font_path = "res://assets/fonts/OptimusPrinceps.ttf"
+
+[sub_resource type="DynamicFont" id=13]
+size = 32
+font_data = SubResource( 12 )
+
+[sub_resource type="DynamicFontData" id=14]
+font_path = "res://assets/fonts/OptimusPrinceps.ttf"
+
+[sub_resource type="DynamicFont" id=15]
+font_data = SubResource( 14 )
+
+[sub_resource type="DynamicFontData" id=8]
+font_path = "res://assets/fonts/OptimusPrinceps.ttf"
+
+[sub_resource type="DynamicFont" id=9]
+size = 32
+font_data = SubResource( 8 )
+
+[sub_resource type="DynamicFontData" id=10]
+font_path = "res://assets/fonts/OptimusPrinceps.ttf"
+
+[sub_resource type="DynamicFont" id=11]
+font_data = SubResource( 10 )
+
 [sub_resource type="SpriteFrames" id=7]
 animations = [ {
 "frames": [ ExtResource( 13 ), ExtResource( 14 ), ExtResource( 18 ), ExtResource( 11 ) ],
@@ -201,6 +246,7 @@ __meta__ = {
 margin_left = 64.0
 margin_right = 160.0
 margin_bottom = 32.0
+custom_fonts/font = SubResource( 17 )
 text = "Level:"
 valign = 1
 __meta__ = {
@@ -211,6 +257,7 @@ __meta__ = {
 margin_left = 184.0
 margin_right = 280.0
 margin_bottom = 32.0
+custom_fonts/font = SubResource( 19 )
 text = "HP:"
 valign = 1
 __meta__ = {
@@ -221,6 +268,7 @@ __meta__ = {
 margin_left = 288.0
 margin_right = 384.0
 margin_bottom = 32.0
+custom_fonts/font = SubResource( 21 )
 text = "Score:"
 valign = 1
 __meta__ = {
@@ -230,64 +278,75 @@ __meta__ = {
 [node name="Win" type="ColorRect" parent="CanvasLayer"]
 visible = false
 margin_right = 640.0
-margin_bottom = 352.0
+margin_bottom = 370.0
 color = Color( 0, 0, 0, 0.701961 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Message" type="Label" parent="CanvasLayer/Win"]
-margin_left = 256.0
+margin_left = 160.0
 margin_top = 96.0
-margin_right = 384.0
-margin_bottom = 128.0
-text = "YOU WIN, BASTARD"
+margin_right = 486.0
+margin_bottom = 131.0
+custom_fonts/font = SubResource( 13 )
+text = "VICTORY ACHIEVED"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Restart" type="Button" parent="CanvasLayer/Win"]
-margin_left = 288.0
-margin_top = 124.0
-margin_right = 352.0
-margin_bottom = 152.0
+margin_left = 280.0
+margin_top = 152.0
+margin_right = 344.0
+margin_bottom = 180.0
+custom_fonts/font = SubResource( 15 )
 text = "RESTART"
 
 [node name="Lose" type="ColorRect" parent="CanvasLayer"]
 visible = false
 margin_right = 640.0
-margin_bottom = 352.0
+margin_bottom = 370.0
 color = Color( 0.290196, 0, 0, 0.701961 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Message" type="Label" parent="CanvasLayer/Lose"]
-margin_left = 256.0
+margin_left = 224.0
 margin_top = 96.0
-margin_right = 384.0
-margin_bottom = 128.0
+margin_right = 381.0
+margin_bottom = 131.0
+custom_fonts/font = SubResource( 9 )
 text = "YOU DIED"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Restart" type="Button" parent="CanvasLayer/Lose"]
-margin_left = 288.0
-margin_top = 124.0
-margin_right = 352.0
-margin_bottom = 152.0
+margin_left = 256.0
+margin_top = 152.0
+margin_right = 320.0
+margin_bottom = 180.0
+custom_fonts/font = SubResource( 11 )
 text = "TRY AGAIN"
 
 [node name="DemonEnemy" type="AnimatedSprite" parent="."]
-position = Vector2( -96, 64 )
+position = Vector2( -320, 32 )
 frames = SubResource( 7 )
 frame = 2
 playing = true
 offset = Vector2( 15, 5 )
 
 [node name="ImpEnemy" parent="." instance=ExtResource( 12 )]
-position = Vector2( -64, 64 )
+position = Vector2( -321, 96 )
 frame = 0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 15 )
+volume_db = -5.0
+autoplay = true
 [connection signal="pressed" from="CanvasLayer/Win/Restart" to="." method="_on_Restart_pressed"]
 [connection signal="pressed" from="CanvasLayer/Lose/Restart" to="." method="_on_Restart_pressed"]
