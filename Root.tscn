@@ -220,7 +220,7 @@ tile_data = PoolIntArray( -262123, 0, 0, -65541, 0, 0, -65536, 0, 0, -65527, 0, 
 position = Vector2( 192, 128 )
 frames = SubResource( 6 )
 animation = "idle"
-frame = 3
+frame = 2
 playing = true
 offset = Vector2( 15, 10 )
 
@@ -336,13 +336,13 @@ text = "TRY AGAIN"
 [node name="DemonEnemy" type="AnimatedSprite" parent="."]
 position = Vector2( -320, 32 )
 frames = SubResource( 7 )
-frame = 2
+frame = 1
 playing = true
 offset = Vector2( 15, 5 )
 
 [node name="ImpEnemy" parent="." instance=ExtResource( 12 )]
 position = Vector2( -321, 96 )
-frame = 0
+frame = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 15 )

@@ -14,12 +14,11 @@ All sprites and tilesets used here are **completely open source**.
 - Procedual level generation
 - Score system
 - Multiple levels
-
+- Enemies pursue the player
 
 ### Known bugs
 
 - Doors may spawn out of the walls
-- Rooms may be created without doors
 - Visibility layer does not work correcly and is more clear than it should
 
 
